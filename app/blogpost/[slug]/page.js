@@ -13,6 +13,8 @@ import OnThisPage from "@/components/onthispage"
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeSlug from 'rehype-slug'
 
+export const dynamic = 'force-dynamic';
+
 export default async function Page({ params }) {
     const filepath = `content/${params.slug}.md`
     
