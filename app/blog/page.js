@@ -1,43 +1,8 @@
 import React from 'react';
-import { buttonVariants } from '@/components/ui/button';
 import Link from 'next/link';
 import fs from "fs";
 import matter from 'gray-matter';
 
-// const blogs = [
-//   {
-//     title: 'First Blog',
-//     description: 'This is the first blog description.',
-//     slug: 'first-blog',
-//     date: '2023-10-01',
-//     author: 'John Doe',
-//     image: '/typescript.webp'
-//   },
-//   {
-//     title: 'Second Blog',
-//     description: 'This is the second blog description.',
-//     slug: 'second-blog',
-//     date: '2023-10-02',
-//     author: 'Jane Doe',
-//     image: 'https://images.pexels.com/photos/1181472/pexels-photo-1181472.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
-//   },
-//   {
-//     title: 'Second Blog',
-//     description: 'This is the second blog description.',
-//     slug: 'second-blog',
-//     date: '2023-10-02',
-//     author: 'Jane Doe',
-//     image: 'https://images.pexels.com/photos/3861972/pexels-photo-3861972.jpeg'
-//   },
-//   // Add more blog objects here
-// ];
-/**
- * Blog component that renders a list of blog posts.
- * Each blog post includes an image, title, description, author, date, and a link to the full post.
- * 
- * 
- * @returns {JSX.Element} The rendered blog component.
- */
 const blog = () => {
     const dirContent = fs.readdirSync("content", "utf-8")
     const blogs = dirContent.map(file => {
@@ -75,11 +40,12 @@ const blog = () => {
                                 <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
                                     Read More
                                 </span>
-                            </button></Link>
-                    </div>
+                            </button>
+                            </Link>
+                        </div>
                     </div>
                 ))}
-        </div>
+            </div>
         </div >
     );
 };

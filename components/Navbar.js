@@ -15,6 +15,7 @@ import LoadingBar from 'react-top-loading-bar';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 const Navbar = () => {
+    const [isMounted, setIsMounted] = useState(false)
     const [progress, setProgress] = useState(0)
     const pathname = usePathname()
     useEffect(() => {
@@ -27,11 +28,17 @@ const Navbar = () => {
       }, 400);
      
     }, [pathname])
+
     useEffect(() => {
+      setIsMounted(true)
       setTimeout(() => {
        setProgress(0)
       }, 50);
     }, [])
+
+    if (!isMounted) {
+      return null
+    }
     
     
     return (

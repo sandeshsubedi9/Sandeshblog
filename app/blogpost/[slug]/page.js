@@ -14,13 +14,6 @@ import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeSlug from 'rehype-slug'
 
 export default async function Page({ params }) {
-    // const blog = {
-    //     title: "Typescript tutorial in hindi",
-    //     author: "John Doe",
-    //     description: "This is a sample blog post description.",
-    //     date: "2024-09-02",
-    //     content: "<p>This is the content of the blog post. It can include <strong>HTML</strong> tags and other elements.</p>"
-    // };
     const filepath = `content/${params.slug}.md`
     
     if(!fs.existsSync(filepath)){ 
