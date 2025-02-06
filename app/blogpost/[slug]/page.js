@@ -14,31 +14,28 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeSlug from "rehype-slug";
 import { notFound } from "next/navigation";
 
-// ✅ Define static paths
-export async function getStaticPaths() {
-  return {
-    paths: [
-      { params: { slug: "c-programming-tutorial" } },
-      { params: { slug: "chatgpt-vs-gemini" } },
-      { params: { slug: "cpp-programming-tutorial" } },
-      { params: { slug: "css-tutorial" } },
-    ],
-    fallback: false, // Ensures only these pages are generated
-  };
+// ✅ Step 1: Generate Static Paths
+export async function generateStaticParams() {
+  return [
+    { slug: "c-programming-tutorial" },
+    { slug: "chatgpt-vs-gemini" },
+    { slug: "cpp-programming-tutorial" },
+    { slug: "css-tutorial" },
+  ];
 }
 
-// ✅ Fetch data at build time
-export async function getStaticProps({ params }) {
+// ✅ Step 2: Read Markdown Files and Convert to HTML
+export default async function Page({ params }) {
   const filepath = path.join(process.cwd(), "content", `${params.slug}.md`);
 
   if (!fs.existsSync(filepath)) {
-    return { notFound: true };
+    notFound();
   }
 
   const fileContent = fs.readFileSync(filepath, "utf-8");
   const { content, data } = matter(fileContent);
 
-  // ✅ Process Markdown to HTML (runs only on the server)
+  // ✅ Convert Markdown to HTML
   const processor = unified()
     .use(remarkParse)
     .use(remarkRehype)
@@ -59,32 +56,15 @@ export async function getStaticProps({ params }) {
 
   const htmlContent = (await processor.process(content)).toString();
 
-  return {
-    props: {
-      title: data.title || "Untitled",
-      description: data.description || "",
-      author: data.author || "Unknown",
-      date: data.date || "Unknown",
-      htmlContent,
-    },
-  };
-}
-
-// ✅ Page Component
-export default function Page({ title, description, author, date, htmlContent }) {
-  if (!htmlContent) {
-    notFound();
-  }
-
   return (
     <div className="max-w-6xl mx-auto p-4 px-7">
-      <h1 className="text-4xl font-bold mb-4">{title}</h1>
+      <h1 className="text-4xl font-bold mb-4">{data.title}</h1>
       <p className="text-base mb-2 border-l-4 border-gray-500 pl-4 italic">
-        &quot;{description}&quot;
+        &quot;{data.description}&quot;
       </p>
       <div className="flex gap-2">
-        <p className="text-sm text-gray-500 mb-4 italic">By {author}</p>
-        <p className="text-sm text-gray-500 mb-4">{date}</p>
+        <p className="text-sm text-gray-500 mb-4 italic">By {data.author}</p>
+        <p className="text-sm text-gray-500 mb-4">{data.date}</p>
       </div>
       <div dangerouslySetInnerHTML={{ __html: htmlContent }} className="prose dark:prose-invert"></div>
       <OnThisPage htmlContent={htmlContent} />
